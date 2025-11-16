@@ -1,5 +1,5 @@
-# Custom Microsecond-Scale UART Communication with STM32F103C4
-
+# Custom UART Communication with STM32F103C4
+![Project Screenshot](project_screenshot.png)
 **Core technical challenge**  
 This project implements a **custom UART-like protocol** between two STM32F103C4 microcontrollers using **timing-based pulses**. Proteus and the STM32 HAL provide only millisecond-resolution timing, so true microsecond timers are unavailable. The solution uses `HAL_GetTick()` and `HAL_Delay()` to encode and decode bit values as distinct millisecond-scale pulse widths, enabling reliable bit-level transmission in the simulator.
 
