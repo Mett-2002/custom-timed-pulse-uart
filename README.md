@@ -4,27 +4,27 @@
 
 This project implements a **custom UART-like protocol** between two STM32F103C4 microcontrollers.
 
-UART (Universal Asynchronous Receiver/Transmitter) is a standard protocol for serial communication using start/stop bits and a fixed baud rate. Here, we emulate UART behavior using **timing-based pulses** because Proteus and the STM32 HAL only provide millisecond-resolution timing—microsecond timers are unavailable. Using `HAL_GetTick()` and `HAL_Delay()`, bit values are encoded and decoded as distinct millisecond-scale pulse widths, enabling reliable byte-level communication in the simulator.
+While UART (Universal Asynchronous Receiver/Transmitter) normally uses start/stop bits and a fixed baud rate, this project **emulates UART behavior using timing-based pulses**. This is necessary because Proteus and STM32 HAL only provide millisecond-resolution timing—**microsecond timers are unavailable**. Using `HAL_GetTick()` and `HAL_Delay()`, bits are encoded and decoded as distinct millisecond-scale pulse widths, enabling reliable byte-level communication in the simulator.
 
 ---
 
-## Project Goals
+## 🎯 Project Goals
 
 * Implement a **reproducible byte-level communication channel** between two STM32F103C4 MCUs **without hardware UART or microsecond timers**.
 * Use only HAL timing functions (`HAL_Delay()` and `HAL_GetTick()`).
-* Provide a clear **transmitter and receiver design**, with a test procedure and tuning guidance.
+* Provide a **clear transmitter and receiver design**, including test procedures and tuning guidance.
 
 ---
 
-## Quick Overview
+## ⚡ Quick Overview
 
 * **Transmitter:** Reads characters from Terminal 1, converts each to an 8-bit sequence, and sends timed pulses on a GPIO pin.
 * **Receiver:** Uses edge-triggered interrupts and `HAL_GetTick()` to measure pulse durations, decode bits, reassemble bytes, and print characters on Terminal 2.
-* **Purpose:** Demonstrates software-timed serial communication to work around timing limitations in Proteus/HAL.
+* **Purpose:** Demonstrates **software-timed serial communication** to work around timing limitations in Proteus/HAL.
 
 ---
 
-## Protocol Specification (Timing)
+## 📏 Protocol Specification (Timing)
 
 |               Signal | Nominal Duration |
 | -------------------: | ---------------: |
@@ -36,11 +36,11 @@ UART (Universal Asynchronous Receiver/Transmitter) is a standard protocol for se
 **Notes:**
 
 * Inter-bit spacing equals the `0` pulse duration to simplify decoding.
-* Receiver measures active pulse width (rising → falling) and classifies it as `1` or `0` using a tolerance window.
+* Receiver measures the **active pulse width** (rising → falling) and classifies it as `1` or `0` using a tolerance window (±10 ms recommended).
 
 ---
 
-## Hardware & Wiring
+## 🔧 Hardware & Wiring
 
 * **MCUs:** Two STM32F103C4 devices (or Proteus MCU instances)
 * **Terminals:** Terminal 1 = transmitter input; Terminal 2 = receiver output
@@ -52,7 +52,7 @@ UART (Universal Asynchronous Receiver/Transmitter) is a standard protocol for se
 
 ---
 
-## Transmitter Design
+## 📡 Transmitter Design
 
 **Setup:**
 
@@ -77,7 +77,7 @@ UART (Universal Asynchronous Receiver/Transmitter) is a standard protocol for se
 
 ---
 
-## Receiver Design
+## 🖥 Receiver Design
 
 **Setup:**
 
@@ -88,7 +88,7 @@ UART (Universal Asynchronous Receiver/Transmitter) is a standard protocol for se
 
 * Override `HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)` to timestamp edges
 * Track `count` (initial `-1`) to detect start bit
-* Use `bit_ready` flag to signal a pulse is ready for processing
+* Use `bit_ready` flag to signal a pulse ready for processing
 
 **`receive_char()` (high-level Steps):**
 
@@ -108,7 +108,7 @@ UART (Universal Asynchronous Receiver/Transmitter) is a standard protocol for se
 
 ---
 
-## Verification & Test Procedure
+## ✅ Verification & Test Procedure
 
 1. Flash transmitter firmware to MCU A and receiver firmware to MCU B (or run both in Proteus)
 2. Wire `data_out` (A) → `EXTI` pin (B) and connect grounds
@@ -120,11 +120,11 @@ UART (Universal Asynchronous Receiver/Transmitter) is a standard protocol for se
 
 ---
 
-## How to Run
+## 🚀 How to Run
 
 1. Compile & flash `main_tx.c` to MCU A and `main_rx.c` to MCU B
-2. Wire `data_out` → `EXTI` pin and share ground
+2. Wire `data_out` → `EXTI` pin and connect ground
 3. Open Terminal 1 and Terminal 2
-4. Type characters in Terminal 1; verify Terminal 2 shows them
+4. Type characters in Terminal 1; verify they appear on Terminal 2
 
 ---
