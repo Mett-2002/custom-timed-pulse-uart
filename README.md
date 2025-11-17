@@ -107,19 +107,6 @@ Expected result: characters typed on Terminal 1 appear identically on Terminal 2
 
 ---
 
-## Suggested file layout & key functions
-Suggested files:
-- `main_tx.c` — transmitter firmware (UART input, `send_char()`, pulse emission)
-- `main_rx.c` — receiver firmware (EXTI callback override, `receive_char()`)
-- Optional: project files / Makefile for each MCU
-
-Key functions:
-- `void send_char(int c)` — convert char to bits and send timed pulses.
-- `void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)` — timestamp edges and set `bit_ready`.
-- `void receive_char(void)` — process `bit_ready` events and reconstruct bytes.
-
----
-
 ## How to run
 1. Compile & flash `main_tx.c` to MCU A and `main_rx.c` to MCU B.  
 2. Wire `data_out` → `EXTI` pin and share GND.  
