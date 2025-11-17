@@ -5,7 +5,7 @@ This project implements a **custom UART-like protocol** between two STM32F103C4 
 
 ---
 
-## Project goals (read first)
+## Project goals
 - Build a reproducible byte-level communication channel between two STM32F103C4 MCUs inside Proteus **without using hardware UART framing** or microsecond timers.
 - Rely only on HAL timing functions (`HAL_Delay()` and `HAL_GetTick()`).
 - Provide a clear transmitter and receiver design, a test procedure, and tuning guidance so others can reproduce the experiment.
@@ -41,12 +41,12 @@ Notes:
 
 ---
 
-## Transmitter — configuration & algorithm
+## Transmitter
 **Setup**
 - Configure UART to read characters from Terminal 1.
 - Configure `data_out` as open-drain + pull-up so idle logic is `1`.
 
-**send_char(int c)** (high-level)
+**send_char(int c)**
 1. Read ASCII character `c` from UART.
 2. Convert `c` to an 8-bit array `bits[]` (choose LSB-first or MSB-first; be consistent).
 3. Emit a **start bit** (200 ms) to signal the receiver a byte is starting.
@@ -62,7 +62,7 @@ Implementation tips:
 
 ---
 
-## Receiver — configuration, IRQ handling & decoding
+## Receiver
 **Setup**
 - Configure UART to print decoded characters to Terminal 2.
 - Configure RX GPIO with internal pull-up and interrupt on rising & falling edges.
@@ -84,15 +84,6 @@ Implementation tips:
 Robustness:
 - If a measured pulse is out-of-range, reset and wait for next start bit.
 - Detect preamble to re-sync after errors.
-
----
-
-## Tolerance & reliability
-- Start with **±10 ms** tolerance when distinguishing 150 ms vs 50 ms. Adjust based on observed jitter.
-- Reliability strategies:
-  - Send a preamble or sync word.
-  - Send each byte multiple times and accept the majority.
-  - Add an 8-bit checksum or simple CRC for integrity checking.
 
 ---
 
