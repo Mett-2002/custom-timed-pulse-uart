@@ -2,20 +2,20 @@
 
 ![Project Screenshot](project_screenshot.png)
 
-This project implements a **software-based UART-like protocol** between two STM32F103C4 microcontrollers. It demonstrates how byte-level serial communication can be achieved **entirely in software**, using only GPIOs and timing functions, without relying on hardware UART peripherals.
+This project implements a **software-based UART-like protocol** between two STM32F103C4 microcontrollers. Its main purpose is **educational**: to demonstrate how byte-level serial communication can be emulated in software using GPIOs and timing functions, without relying on hardware UART peripherals.
 
-**UART (Universal Asynchronous Receiver/Transmitter)** is a standard serial communication protocol that transmits data one bit at a time, using **start and stop bits** to frame each byte, and usually relies on precise hardware timers to maintain a fixed baud rate. In this project, UART behavior is **emulated via timing-based pulses** because typical simulation setups (like Proteus) or simple HAL configurations do not provide microsecond-resolution timers.
+**UART (Universal Asynchronous Receiver/Transmitter)** is a standard serial communication protocol that transmits data one bit at a time, using **start and stop bits** to frame each byte, normally requiring precise hardware timers to maintain a fixed baud rate. In this project, UART behavior is **simulated using timing-based pulses**, because microsecond-resolution timers are not used.
 
-Using `HAL_GetTick()` and `HAL_Delay()`, each bit is encoded as a distinct millisecond-scale pulse, and the receiver decodes them via GPIO interrupts, creating a **reliable software-timed communication channel**.
+Using `HAL_GetTick()` and `HAL_Delay()`, each bit is encoded as a millisecond-scale pulse, and the receiver decodes them via GPIO interrupts. This creates a **reliable, software-timed communication channel** that is fun to experiment with and great for understanding low-level serial communication.
 
 ---
 
 ## 🎯 Project Goals
 
-* Implement a **reproducible byte-level communication channel** between two STM32F103C4 MCUs **without hardware UART or microsecond timers**.
-* Explore **software-timed communication** and low-level GPIO handling.
-* Provide a **clear transmitter and receiver design**, including test procedures and tuning guidance.
-* Serve as an **educational tool** for understanding UART timing, interrupts, and serial communication fundamentals.
+* Provide an **engaging, educational experience** in serial communication and MCU programming.
+* Explore **software-timed communication** and interrupt handling on STM32 MCUs.
+* Demonstrate a **transmitter and receiver design** for byte-level data transfer in a simulated environment.
+* Help learners **visualize UART timing, bit encoding, and decoding** without needing hardware peripherals.
 
 ---
 
