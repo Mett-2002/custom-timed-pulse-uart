@@ -2,17 +2,20 @@
 
 ![Project Screenshot](project_screenshot.png)
 
-This project implements a **custom UART-like protocol** between two STM32F103C4 microcontrollers.
+This project implements a **software-based UART-like protocol** between two STM32F103C4 microcontrollers. It demonstrates how byte-level serial communication can be achieved **entirely in software**, using only GPIOs and timing functions, without relying on hardware UART peripherals.
 
-While UART (Universal Asynchronous Receiver/Transmitter) normally uses start/stop bits and a fixed baud rate, this project **emulates UART behavior using timing-based pulses**. This is necessary because Proteus and STM32 HAL only provide millisecond-resolution timing—**microsecond timers are unavailable**. Using `HAL_GetTick()` and `HAL_Delay()`, bits are encoded and decoded as distinct millisecond-scale pulse widths, enabling reliable byte-level communication in the simulator.
+**UART (Universal Asynchronous Receiver/Transmitter)** is a standard serial communication protocol that transmits data one bit at a time, using **start and stop bits** to frame each byte, and usually relies on precise hardware timers to maintain a fixed baud rate. In this project, UART behavior is **emulated via timing-based pulses** because typical simulation setups (like Proteus) or simple HAL configurations do not provide microsecond-resolution timers.
+
+Using `HAL_GetTick()` and `HAL_Delay()`, each bit is encoded as a distinct millisecond-scale pulse, and the receiver decodes them via GPIO interrupts, creating a **reliable software-timed communication channel**.
 
 ---
 
 ## 🎯 Project Goals
 
 * Implement a **reproducible byte-level communication channel** between two STM32F103C4 MCUs **without hardware UART or microsecond timers**.
-* Use only HAL timing functions (`HAL_Delay()` and `HAL_GetTick()`).
+* Explore **software-timed communication** and low-level GPIO handling.
 * Provide a **clear transmitter and receiver design**, including test procedures and tuning guidance.
+* Serve as an **educational tool** for understanding UART timing, interrupts, and serial communication fundamentals.
 
 ---
 
