@@ -120,24 +120,6 @@ Key functions:
 
 ---
 
-## Troubleshooting
-- Missed bits / errors: increase tolerance (e.g., ±15 ms), add preamble, enable debug prints.  
-- Floating or contention on `data_out`: ensure it is open-drain with pull-up.  
-- If Proteus shows excessive jitter, consider using a slightly larger tolerance or simple redundancy.
-
----
-
-## Limitations & improvements
-Limitations:
-- Low throughput due to millisecond timings. Not suitable for high-speed or production use.
-
-Improvements:
-- Use hardware timers (input capture) or USART for higher speed and accuracy.
-- Implement framing (preamble + length + CRC) and retransmission logic.
-- Use averaging or multi-sample measurement to reduce jitter-related errors.
-
----
-
 ## How to run
 1. Compile & flash `main_tx.c` to MCU A and `main_rx.c` to MCU B.  
 2. Wire `data_out` → `EXTI` pin and share GND.  
