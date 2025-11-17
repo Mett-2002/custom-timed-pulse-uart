@@ -111,3 +111,5 @@ This project implements a **custom UART-like protocol** between two STM32F103C4 
 2. Wire `data_out` → `EXTI` pin and share ground.  
 3. Open Terminal 1 and Terminal 2.  
 4. Type characters in Terminal 1; verify Terminal 2 shows them.
+
+---
